@@ -39,5 +39,20 @@ export interface User {
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
+    permissions: string[];
+    roles: string[];
     [key: string]: unknown; // This allows for additional properties...
+}
+
+export type PaginatedData<T> = {
+    data: T[];
+    links: Record<string, string>;
+}
+
+export interface Feature {
+    id: number;
+    name: string;
+    description: string;
+    created_at: string;
+    user: User;
 }

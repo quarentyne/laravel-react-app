@@ -19,7 +19,7 @@ export default [
         },
         rules: {
             'react/react-in-jsx-scope': 'off',
-            'react/prop-types': 'off',
+            'react/prop-types': 'error',
             'react/no-unescaped-entities': 'off',
         },
         settings: {
