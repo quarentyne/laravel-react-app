@@ -28,10 +28,13 @@ export default function FeatureItem({ feature }: { feature: Feature }) {
             </div>
             <div className="flex-1">
                 <h3 className="text-2xl mb-2">{feature.name}</h3>
-                <p>{isExpanded ? feature.description : `${feature.description.slice(0, 200)}...`}</p>
-                <button type="button" onClick={toggleReadMore} className="text-amber-500 hover:underline cursor-pointer">
-                    {isExpanded ? 'Read Less' : 'Read More'}
-                </button>
+                <p>{isExpanded ? feature.description : `${feature.description.slice(0, 500)}...`}</p>
+                {feature.description.length > 500 &&
+                    <button type="button" onClick={toggleReadMore}
+                            className="text-amber-500 hover:underline cursor-pointer">
+                        {isExpanded ? 'Read Less' : 'Read More'}
+                    </button>
+                }
             </div>
         </div>
     );
