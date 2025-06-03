@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Feature extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['name', 'description', 'user_id'];
+
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);

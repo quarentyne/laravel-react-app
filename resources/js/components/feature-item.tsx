@@ -1,5 +1,6 @@
 import { Feature } from '@/types';
 import { useState } from 'react';
+import { Link } from '@inertiajs/react';
 
 export default function FeatureItem({ feature }: { feature: Feature }) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -8,9 +9,11 @@ export default function FeatureItem({ feature }: { feature: Feature }) {
        setIsExpanded(!isExpanded);
     };
 
+    const isLongText = feature.description.length > 500;
+
     return (
         <div
-            className="flex gap-8 border-sidebar-border/70 dark:border-sidebar-border relative rounded-xl border">
+            className="flex gap-8 border-sidebar-border/70 dark:border-sidebar-border relative rounded-xl border p-4">
             <div className="flex flex-col items-center">
                 <button type="button" className="cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
@@ -27,9 +30,11 @@ export default function FeatureItem({ feature }: { feature: Feature }) {
                 </button>
             </div>
             <div className="flex-1">
-                <h3 className="text-2xl mb-2">{feature.name}</h3>
-                <p>{isExpanded ? feature.description : `${feature.description.slice(0, 500)}...`}</p>
-                {feature.description.length > 500 &&
+                <Link className="text-2xl mb-2" href={route('feature.show', feature.id)}>
+                    {feature.name}
+                </Link>
+                <p>{isExpanded ? feature.description : `${isLongText ? feature.description.slice(0, 500) + '...' : feature.description}`}</p>
+                {isLongText &&
                     <button type="button" onClick={toggleReadMore}
                             className="text-amber-500 hover:underline cursor-pointer">
                         {isExpanded ? 'Read Less' : 'Read More'}
