@@ -1,6 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, Feature, PaginatedData } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import FeatureItem from '@/components/feature-item';
 import { Button } from '@/components/ui/button';
 
@@ -12,9 +12,14 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Index({features}: {features: PaginatedData<Feature>}) {
+    const successMessage: string = usePage().props.success as string;
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Features" />
+            <>
+                {successMessage && <div className="bg-emerald-400 p-6 m-4 rounded">{successMessage}</div>}
+            </>
             <Link href={route('feature.create')} className="m-4">
                 <Button className="cursor-pointer" variant='default'>Create new Feature</Button>
             </Link>
