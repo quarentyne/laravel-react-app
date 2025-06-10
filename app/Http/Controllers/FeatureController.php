@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\FeatureRecourse;
 use App\Models\Feature;
+use App\Models\Upvote;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -17,7 +20,23 @@ class FeatureController extends Controller
      */
     public function index(): Response
     {
-        $features = Feature::latest()->paginate(10);
+        $userId = auth()->id();
+
+        $features = Feature::latest()
+            ->withCount(['upvotes as upvote_count' => function (Builder $query) {
+                $query->select(DB::raw('SUM(CASE WHEN upvote = 1 THEN 1 ELSE -1 END)'));
+            }])
+            ->withExists([
+                'upvotes as user_has_upvoted' => function (Builder $query) use ($userId) {
+                    $query->where('user_id', $userId)
+                        ->where('upvote', 1);
+                },
+                'upvotes as user_has_downvoted' => function (Builder $query) use ($userId) {
+                    $query->where('user_id', $userId)
+                        ->where('upvote', 0);
+                },
+            ])
+            ->paginate(10);
 
         return Inertia::render('feature/index', [
             'features' => FeatureRecourse::collection($features),
@@ -54,6 +73,19 @@ class FeatureController extends Controller
      */
     public function show(Feature $feature): Response
     {
+        $feature->upvote_count = Upvote::where('feature_id', $feature->id)
+            ->sum(DB::raw('CASE WHEN upvote = 1 THEN 1 ELSE -1 END'));
+
+        $feature->user_has_upvoted = Upvote::where('feature_id', $feature->id)
+            ->where('user_id', auth()->id())
+            ->where('upvote', 1)
+            ->exists();
+
+        $feature->user_has_downvoted = Upvote::where('feature_id', $feature->id)
+            ->where('user_id', auth()->id())
+            ->where('upvote', 0)
+            ->exists();
+
         return Inertia::render('feature/show', [
             'feature' => new FeatureRecourse($feature),
         ]);

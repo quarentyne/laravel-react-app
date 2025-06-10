@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FeatureController;
+use App\Http\Controllers\UpvoteController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -12,6 +13,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::resource('feature', FeatureController::class);
+    Route::post('/feature/{feature}/upvote', UpvoteController::class)->name('upvote.store');
 });
 
 require __DIR__.'/settings.php';
