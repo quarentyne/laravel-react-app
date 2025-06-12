@@ -13,7 +13,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::resource('feature', FeatureController::class);
-    Route::post('/feature/{feature}/upvote', UpvoteController::class)->name('upvote.store');
+    Route::post('/feature/{feature}/upvote', [UpvoteController::class, 'store'])->name('upvote.store');
+    Route::delete('/upvote/{feature}', [UpvoteController::class, 'destroy'])->name('upvote.destroy');
 });
 
 require __DIR__.'/settings.php';

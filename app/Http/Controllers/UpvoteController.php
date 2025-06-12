@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Feature;
 use App\Models\Upvote;
 use Illuminate\Http\Request;
 
 class UpvoteController extends Controller
 {
-    public function __invoke(Request $request) {
+    public function store(Request $request) {
         $data = $request->validate([
-            'feature_id' => 'required|integer|exists:feature,id',
+            'feature_id' => 'required|integer|exists:features,id',
             'upvote' => 'required|boolean',
         ]);
 
@@ -18,6 +19,12 @@ class UpvoteController extends Controller
             ['upvote' => $data['upvote']]
         );
 
-        return response(null, 204);
+        return back();
+    }
+
+    public function destroy(Feature $feature) {
+        $feature->upvotes()->where('user_id', auth()->id())->delete();
+
+        return back();
     }
 }
