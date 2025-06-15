@@ -1,7 +1,9 @@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, Feature } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import FeatureUpvoteDownvote from '@/components/feature-upvote-downvote';
+import NewCommentForm from '@/components/new-comment-form';
+import CommentItem from '@/components/comment-item';
 
 export default function Show({feature}: {feature: Feature}) {
     const breadcrumbs: BreadcrumbItem[] = [
@@ -26,6 +28,14 @@ export default function Show({feature}: {feature: Feature}) {
                         <div className="flex-1">
                             <h2 className="text-2xl mb-2">{feature.name}</h2>
                             <p>{feature.description}</p>
+                            <div className="mt-8">
+                                <NewCommentForm feature={feature}/>
+                                <div className="mt-4">
+                                    {feature.comments.map((comment) => (
+                                        <CommentItem comment={comment} key={comment.id} />
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { Link } from '@inertiajs/react';
 import FeatureActionsDropdown from '@/components/feature-actions-dropdown';
 import FeatureUpvoteDownvote from '@/components/feature-upvote-downvote';
+import { Button } from '@/components/ui/button';
 
 export default function FeatureItem({ feature }: { feature: Feature }) {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleReadMore = () => {
-       setIsExpanded(!isExpanded);
+        setIsExpanded(!isExpanded);
     };
 
     const isLongText = feature.description.length > 500;
@@ -28,6 +29,11 @@ export default function FeatureItem({ feature }: { feature: Feature }) {
                         {isExpanded ? 'Read Less' : 'Read More'}
                     </button>
                 }
+                <div className="mt-2">
+                    <Link href={route('feature.show', feature.id)}>
+                        <Button className="cursor-pointer" variant='outline'>Comments</Button>
+                    </Link>
+                </div>
             </div>
             <div>
                 <FeatureActionsDropdown feature={feature} />
