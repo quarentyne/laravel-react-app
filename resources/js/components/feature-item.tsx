@@ -4,9 +4,13 @@ import { Link } from '@inertiajs/react';
 import FeatureActionsDropdown from '@/components/feature-actions-dropdown';
 import FeatureUpvoteDownvote from '@/components/feature-upvote-downvote';
 import { Button } from '@/components/ui/button';
+import { useCan } from '@/hooks/use-can';
+import { PERMISSIONS } from '@/constants/permissions';
 
 export default function FeatureItem({ feature }: { feature: Feature }) {
     const [isExpanded, setIsExpanded] = useState(false);
+    const canManage = useCan(PERMISSIONS.MANAGE_FEATURES, feature.user.id);
+    const canComment = useCan(PERMISSIONS.MANAGE_COMMENTS);
 
     const toggleReadMore = () => {
         setIsExpanded(!isExpanded);
@@ -29,15 +33,19 @@ export default function FeatureItem({ feature }: { feature: Feature }) {
                         {isExpanded ? 'Read Less' : 'Read More'}
                     </button>
                 }
-                <div className="mt-2">
+                {canComment &&
+                    <div className="mt-2">
                     <Link href={route('feature.show', feature.id)}>
                         <Button className="cursor-pointer" variant='outline'>Comments</Button>
                     </Link>
                 </div>
+                }
             </div>
-            <div>
-                <FeatureActionsDropdown feature={feature} />
-            </div>
+            {canManage &&
+                <div>
+                    <FeatureActionsDropdown feature={feature} />
+                </div>
+            }
         </div>
     );
 }
