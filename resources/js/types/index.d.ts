@@ -66,5 +66,4 @@ export interface Feature {
     user_has_upvoted: boolean;
     user_has_downvoted: boolean;
     user: User;
-    comments: Comment[];
 }

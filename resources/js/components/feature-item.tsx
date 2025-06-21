@@ -23,7 +23,7 @@ export default function FeatureItem({ feature }: { feature: Feature }) {
             className="flex gap-8 border-sidebar-border/70 dark:border-sidebar-border relative rounded-xl border p-4">
             <FeatureUpvoteDownvote feature={feature} />
             <div className="flex-1">
-                <Link className="text-2xl mb-2" href={route('feature.show', feature.id)}>
+                <Link prefetch className="text-2xl mb-2" href={route('feature.show', feature.id)}>
                     {feature.name}
                 </Link>
                 <p>{isExpanded ? feature.description : `${isLongText ? feature.description.slice(0, 500) + '...' : feature.description}`}</p>
@@ -35,7 +35,7 @@ export default function FeatureItem({ feature }: { feature: Feature }) {
                 }
                 {canComment &&
                     <div className="mt-2">
-                    <Link href={route('feature.show', feature.id)}>
+                    <Link prefetch href={route('feature.show', feature.id)}>
                         <Button className="cursor-pointer" variant='outline'>Comments</Button>
                     </Link>
                 </div>

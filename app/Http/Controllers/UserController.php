@@ -20,7 +20,9 @@ class UserController extends Controller
         $users = User::latest()->paginate(15);
 
         return Inertia::render('user/index', [
-            'users' => AuthUserResource::collection($users),
+            'users' => Inertia::merge(AuthUserResource::collection($users)->resolve()),
+            'page' => $users->currentPage(),
+            'lastPage' => $users->lastPage(),
         ]);
     }
 

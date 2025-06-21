@@ -1,9 +1,11 @@
-import type { BreadcrumbItem, User, PaginatedData } from '@/types';
+import type { BreadcrumbItem, User } from '@/types';
 import AppLayout from '@/layouts/app-layout';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, usePage, WhenVisible } from '@inertiajs/react';
 import UserItem from '@/components/user-item';
+import { createElement } from 'react';
 
-export default function Index({ users }: {users: PaginatedData<User>}) {
+export default function Index({ users, page, lastPage }: {users: User[], page: number, lastPage: number}) {
+    console.log(users)
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Users',
@@ -12,6 +14,7 @@ export default function Index({ users }: {users: PaginatedData<User>}) {
     ];
 
     const successMessage: string = usePage().props.success as string;
+    const fallback = createElement('div', {}, 'Loading...');
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -43,9 +46,22 @@ export default function Index({ users }: {users: PaginatedData<User>}) {
                     </tr>
                     </thead>
                     <tbody>
-                    {users.data.map((user: User) => (
+                    {users.map((user: User) => (
                         <UserItem user={user} key={user.id} />
                     ))}
+                    {page < lastPage &&
+                        <WhenVisible
+                            fallback={fallback}
+                            always
+                            params={{
+                                data: { page: page + 1 },
+                                preserveUrl: true,
+                                only: ['users', 'page'],
+                            }}
+                        >
+                            Loading
+                        </WhenVisible>
+                    }
                     </tbody>
                 </table>
             </div>

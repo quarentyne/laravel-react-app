@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\FeatureListResource;
 use App\Http\Resources\FeatureRecourse;
+use App\Http\Resources\UserResource;
 use App\Models\Feature;
 use App\Models\Upvote;
 use Illuminate\Database\Eloquent\Builder;
@@ -40,7 +41,9 @@ class FeatureController extends Controller
             ->paginate(10);
 
         return Inertia::render('feature/index', [
-            'features' => FeatureListResource::collection($features),
+            'features' => Inertia::merge(FeatureListResource::collection($features)->resolve()),
+            'page' => $features->currentPage(),
+            'lastPage' => $features->lastPage(),
         ]);
     }
 
@@ -89,9 +92,16 @@ class FeatureController extends Controller
 
         return Inertia::render('feature/show', [
             'feature' => new FeatureRecourse($feature),
+            'comments' => Inertia::defer(fn() => $feature->comments->map(function ($comment) {
+                return [
+                    'id'            => $comment->id,
+                    'comment'       => $comment->comment,
+                    'user'          => new UserResource($comment->user),
+                    'created_at'    => $comment->created_at->format('Y-m-d H:i:s'),
+                ];
+            })),
         ]);
     }
-
     /**
      * Show the form for editing the specified resource.
      */
