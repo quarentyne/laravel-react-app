@@ -32,11 +32,11 @@ export default function Edit({ user }: { user: User }) {
         'roles': user.roles,
     });
 
-    const onChangeRole = e => {
-        if(e.target.dataset.state === 'unchecked') {
-            setData('roles', [...data.roles, e.target.value]);
+    const onChangeRole = (e: React.MouseEvent<HTMLButtonElement>) => {
+        if(e.currentTarget.dataset.state === 'unchecked') {
+            setData('roles', [...data.roles, e.currentTarget.value]);
         } else {
-            setData('roles', [...data.roles.filter(role => role !== e.target.value)]);
+            setData('roles', [...data.roles.filter(role => role !== e.currentTarget.value)]);
         }
     };
 
