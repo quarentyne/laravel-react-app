@@ -63,7 +63,7 @@ jobs:
           script_stop: true
           script:
             cd htdocs
-            cd srv881258.hstgr.cloud
+            cd "srv881258.hstgr.cloud"
             git checkout main
             git pull
             composer install
