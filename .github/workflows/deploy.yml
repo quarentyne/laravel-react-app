@@ -62,7 +62,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
           script:
-            cd htdocs/srv881258.hstgr.cloud
+            cd htdocs
+            cd srv881258.hstgr.cloud
             git checkout main
             git pull
             composer install
