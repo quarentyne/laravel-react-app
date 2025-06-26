@@ -50,7 +50,7 @@ jobs:
         run: touch database/database.sqlite
 
       - name: Run Migrations
-        run: php artisan migrate --force
+        run: php artisan migrate --force --seed
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
